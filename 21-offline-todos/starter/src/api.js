@@ -7,12 +7,12 @@ let todos = [
 ];
 
 export async function fetchTodos() {
-  await wait(500);
+  await wait(2000);
   return [...todos];
 }
 
 export async function toggleTodo(todoId) {
-  await wait(350);
+  await wait(2000);
   todos = todos.map((todo) =>
     todo.id === todoId ? { ...todo, done: !todo.done } : todo
   );

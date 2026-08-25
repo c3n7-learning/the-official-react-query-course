@@ -1,0 +1,22 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { fetchRepoData } from "./api";
+
+export default function Repo() {
+  const { data, isPending } = useQuery({
+    queryKey: ["repoData"],
+    queryFn: fetchRepoData,
+    staleTime: 10_000,
+  });
+
+  if (isPending) return <p>Loading repo...</p>;
+
+  return (
+    <section>
+      <h1>{data.name}</h1>
+      <p>{data.description}</p>
+      <strong>Stars: {data.stargazers_count}</strong>
+    </section>
+  );
+}

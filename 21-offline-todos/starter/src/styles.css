@@ -1,0 +1,54 @@
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+    Arial, sans-serif;
+  background: #f7f7f8;
+  margin: 0;
+  color: #202124;
+}
+
+.page {
+  max-width: 680px;
+  margin: 2rem auto;
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.status {
+  max-width: 680px;
+  margin: 2rem auto;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.7rem;
+  margin: 0.4rem 0;
+  background: #fff;
+}
+
+button.done {
+  text-decoration: line-through;
+  color: #687076;
+}
+
+.badge {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.badge.offline {
+  background: #ffe0e0;
+  color: #a01414;
+}

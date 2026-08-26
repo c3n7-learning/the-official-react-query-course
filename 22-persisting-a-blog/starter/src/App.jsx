@@ -6,7 +6,9 @@ function usePostList() {
   return useQuery({
     queryKey: ["posts"],
     queryFn: fetchPostList,
-    staleTime: 60_000,
+    meta: {
+      persist: true,
+    }
   });
 }
 
@@ -15,7 +17,6 @@ function usePost(postId) {
     queryKey: ["posts", postId],
     queryFn: () => fetchPostById(postId),
     enabled: Boolean(postId),
-    staleTime: 60_000,
     // TODO: add per-query persister once app-level persistence works
   });
 }

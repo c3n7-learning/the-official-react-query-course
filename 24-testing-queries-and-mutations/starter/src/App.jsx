@@ -14,7 +14,7 @@ export default function App() {
   const addTodoMutation = useMutation({
     mutationFn: addTodo,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      return queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
   });
 

@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 import App from "./App";
 import { renderWithClient } from "./testUtils";
+import * as api from "./api";
 
 vi.mock("./api", () => ({
   fetchTodos: vi.fn(async () => [
@@ -14,19 +15,32 @@ vi.mock("./api", () => ({
 
 test("TODO: renders initial todos from query", async () => {
   expect.hasAssertions();
-  renderWithClient(<App />);
-  // TODO: add assertions for loaded todo items
+  const rendered = renderWithClient(<App />);
+  expect(await rendered.findByText("Mock Todo A")).toBeInTheDocument();
 });
 
 test("TODO: adds a new todo with mutation", async () => {
   expect.hasAssertions();
   const user = userEvent.setup();
   renderWithClient(<App />);
+
   // TODO: type text, submit, assert new item appears
+  await user.type(screen.getByLabelText('todo-input'), 'Mock Todo C');
   await user.click(screen.getByRole("button", { name: /add todo/i }));
+
+  expect(api.addTodo).toHaveBeenCalled();
+  expect(api.addTodo.mock.calls[0][0]).toBe("Mock Todo C");
 });
 
 test("TODO: shows error message on mutation failure", async () => {
   expect.hasAssertions();
+  api.addTodo.mockRejectedValueOnce(new Error("Oh No"));
   // TODO: override addTodo mock for this test to reject and assert alert text
+  const user = userEvent.setup();
+  renderWithClient(<App />);
+
+  await user.type(screen.getByLabelText('todo-input'), 'Mock Todo C');
+  await user.click(screen.getByRole("button", { name: /add todo/i }));
+
+  expect(await screen.findByRole("alert")).toHaveTextContent("Oh No");
 });

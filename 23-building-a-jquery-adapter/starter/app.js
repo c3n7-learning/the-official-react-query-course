@@ -11,17 +11,42 @@ async function fetchRepo() {
 }
 
 $.widget("custom.useQuery", {
+  // constructor
   _create() {
     // TODO 1: call this.options.queryClient.mount()
+    this.options.queryClient.mount() // to subscribe to browser events that fire refetch on browser focus
+
     // TODO 2: create QueryObserver with queryClient + queryOptions
+    this._observer = new QueryObserver(
+      this.options.queryClient,
+      this.options.queryOptions,
+    );
+
     // TODO 3: subscribe and call this._trigger("update", null, trackedResult)
+    this.unsubscribe = this._observer.subscribe(() => {
+      const result = this._observer.getCurrentResult();
+      const trackedResult = this._observer.trackResult(result); // We want to trigger rerenders only if the properties a component cares about changes
+      console.log("Subscribing", { result, trackedResult });
+      this._trigger(
+        'update',
+        null,
+        trackedResult,
+      );
+    });
   },
   _setOption(key, value) {
     this._super(key, value);
     // TODO 4: if queryOptions changed, call observer.setOptions
+    // give the consumer an ability to modify options
+    if (key === "queryOptions") {
+      console.log("Modifying options", value);
+      this._observer.setOptions(value);
+    }
   },
   _destroy() {
     // TODO 5: unsubscribe and unmount queryClient
+    this.options.queryClient.unmount()
+    this.unsubscribe();
   },
 });
 

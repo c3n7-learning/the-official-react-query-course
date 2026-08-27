@@ -6,8 +6,7 @@ function useTodos() {
   return useQuery({
     queryKey: ["todos"],
     queryFn: fetchTodos,
-    staleTime: 0,
-    // TODO: switch to Infinity for websocket-driven freshness
+    staleTime: Infinity,
   });
 }
 
@@ -23,7 +22,7 @@ function useToggleTodo() {
       return toggleTodo(id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      // queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
   });
 }

@@ -1,6 +1,7 @@
-import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import { HydrationBoundary, QueryClient, defaultShouldDehydrateQuery, dehydrate } from "@tanstack/react-query";
 import { fetchRepoData } from "./api";
 import Repo from "./Repo";
+import React from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -13,9 +14,15 @@ function Footer() {
 }
 
 export default async function Page() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      dehydrate: {
+        shouldDehydrateQuery: (query) => defaultShouldDehydrateQuery(query) || query.state.status === "pending"
+      }
+    }
+  });
 
-  await queryClient.prefetchQuery({
+  queryClient.query({
     queryKey: ["repoData"],
     queryFn: fetchRepoData,
     staleTime: 10_000,
@@ -26,7 +33,9 @@ export default async function Page() {
       <Navbar />
       {/* TODO: stream this section with Suspense */}
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <Repo />
+        <React.Suspense fallback={<p>Loading repo...</p>}>
+          <Repo />
+        </React.Suspense>
       </HydrationBoundary>
       <Footer />
     </main>

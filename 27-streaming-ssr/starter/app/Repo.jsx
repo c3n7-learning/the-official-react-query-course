@@ -1,10 +1,10 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { fetchRepoData } from "./api";
 
 export default function Repo() {
-  const { data, isPending } = useQuery({
+  const { data, isPending } = useSuspenseQuery({
     queryKey: ["repoData"],
     queryFn: fetchRepoData,
     staleTime: 10_000,
